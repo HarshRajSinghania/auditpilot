@@ -1,0 +1,12 @@
+SYNTHETIC DEMO DOCUMENT — NOT AN ORGANISATION'S POLICY
+
+Information Security Policy
+Version 1.0
+Approved by: Example CISO
+Policy review: every year
+
+Access to systems must be reviewed regularly. Staff should use strong
+multi-factor authentication, report incidents and protect company data.
+
+The approval and version markers are inputs to deterministic demo checks.
+They do not prove actual approval, implementation or audit acceptance.

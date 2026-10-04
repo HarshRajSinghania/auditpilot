@@ -1,0 +1,31 @@
+name: Bug report
+description: Help reproduce a setup, validation, or demo problem.
+title: "bug: "
+labels: []
+body:
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps and a synthetic reproduction
+      description: Include commands or sample data. Do not attach confidential evidence or credentials.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: OS, Python or Docker version, commit / branch
+    validations:
+      required: true

@@ -1,0 +1,22 @@
+name: Workflow feedback
+description: Tell us which GRC workflow or validation check would help you.
+title: "feedback: "
+body:
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Which workflow are you trying to improve?
+      description: Describe the practical problem without sensitive company details.
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: What did you try in AuditPilot?
+      description: Did setup work? Which finding was helpful or confusing?
+    validations:
+      required: true
+  - type: textarea
+    id: next
+    attributes:
+      label: What would make it more useful?

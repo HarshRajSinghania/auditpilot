@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Find missing owners, overdue reviews and invalid values in a risk register with AuditPilot.">
+  <title>AuditPilot · Risk register check</title>
+  <link rel="stylesheet" href="/demo-assets/styles.css">
+  <script src="/demo-assets/app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<aside class="sidebar">
+  <a class="brand" href="/demo"><span class="brand-mark" aria-hidden="true">A</span> AuditPilot<span class="brand-dot">●</span></a>
+  <p class="side-label">WORKSPACE</p>
+  <a class="nav active" href="/demo" aria-current="page"><span aria-hidden="true">▤</span> Risk register</a>
+  <a class="nav" href="/docs" target="_blank" rel="noopener"><span aria-hidden="true">↗</span> Explore the API</a>
+  <a class="nav" href="https://github.com/anirudhnshandilya/auditpilot" target="_blank" rel="noopener"><span aria-hidden="true">⌘</span> Source & feedback</a>
+  <div class="side-bottom"><span class="eyebrow">BUILT IN THE OPEN</span><p>A clearer starting point<br>for audit preparation.</p><span class="version">v0.1.0 · Early access</span></div>
+</aside>
+<div class="workspace">
+  <header class="topbar"><span>Workspace <span aria-hidden="true">/</span> <strong>Risk register</strong></span><span class="local-badge"><i></i> Local workspace</span></header>
+  <main id="main">
+    <div class="page-heading"><div><p class="eyebrow">REGISTER QUALITY</p><h1>Find the gaps.<br><span>Make the next step clear.</span></h1><p class="intro">Check your risk register for missing owners, overdue reviews<br class="desktop"> and inconsistent values before audit preparation.</p></div><span class="edition">OPEN SOURCE<br><strong>Made for GRC teams</strong></span></div>
+    <section class="upload-card" aria-labelledby="upload-title">
+      <div class="upload-main"><span class="file-icon" aria-hidden="true">↑</span><div><h2 id="upload-title">Start with a risk register</h2><p>Choose a CSV or XLSX file. Maximum size: 5 MB.</p><form id="upload-form"><label class="sr-only" for="register-file">Risk register file</label><input id="register-file" type="file" accept=".csv,.xlsx" required><button type="submit" id="validate-button" class="primary">Check register <span aria-hidden="true">→</span></button></form></div></div>
+      <div class="sample-area"><span class="eyebrow">JUST EXPLORING?</span><p>Try a synthetic register.<br>No account or API key needed.</p><div class="sample-buttons"><button id="messy-button" class="secondary">Try messy sample</button><button id="corrected-button" class="text-button">Try corrected sample →</button></div><a class="download-sample" href="/demo/samples/messy.csv">Download sample CSV</a></div>
+    </section>
+    <div id="status" role="status" aria-live="polite"></div>
+    <p id="error" role="alert" hidden></p>
+    <section id="results" aria-labelledby="result-title" hidden>
+      <div class="result-heading"><div><p class="eyebrow">VALIDATION RESULTS</p><h2 id="result-title">Register checked</h2><p id="result-file"></p></div><button id="export-button" class="secondary">Export findings CSV ↓</button></div>
+      <div class="metrics"><div class="metric"><span>Register quality score</span><strong id="score">—</strong><small>100 − 10 per finding; minimum 0</small></div><div class="metric"><span>Findings to review</span><strong id="finding-count">—</strong><small id="finding-note"></small></div><div class="metric"><span>High / critical findings</span><strong id="high-count">—</strong><small>Prioritize these for review</small></div><div class="metric"><span>Risks checked</span><strong id="row-count">—</strong><small id="column-count"></small></div></div>
+      <div class="findings-card"><div class="findings-toolbar"><h3>What needs attention</h3><label for="severity-filter">Severity <select id="severity-filter"><option value="all">All findings</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option><option>Info</option></select></label></div><div class="table-scroll"><table><thead><tr><th scope="col">Severity</th><th scope="col">CSV / XLSX row</th><th scope="col">Field</th><th scope="col">Finding & next step</th></tr></thead><tbody id="findings-body"></tbody></table></div><div id="empty-findings" class="empty-success" hidden></div></div>
+      <p class="score-note">This is a heuristic register-quality check, not an ISO certification or organization-wide readiness assessment.</p>
+    </section>
+    <section id="getting-started" class="getting-started"><div><span class="step-number">01</span><h3>Upload a register</h3><p>Use your CSV / XLSX, or try<br>the included synthetic sample.</p></div><div><span class="step-number">02</span><h3>Review the findings</h3><p>See the affected row, field<br>and a recommended next step.</p></div><div><span class="step-number">03</span><h3>Fix and check again</h3><p>Export findings, update the register<br>and run another check.</p></div></section>
+    <footer><span>14 validation rules · No LLM calls in this workflow</span><span>Use synthetic data when sharing demos.</span></footer>
+  </main>
+</div>
+</body>
+</html>

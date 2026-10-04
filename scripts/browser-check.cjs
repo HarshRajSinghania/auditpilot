@@ -1,0 +1,44 @@
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+const path=require('node:path');
+const os=require('node:os');
+const ROOT=path.resolve(__dirname,'..');
+const OUTPUT=path.join(os.tmpdir(),'auditpilot-browser-check');
+require('node:fs').mkdirSync(OUTPUT,{recursive:true});
+const BASE_URL=process.env.AUDITPILOT_BASE_URL || 'http://127.0.0.1:8000';
+(async()=>{
+ const b=await chromium.launch({headless:true,args:process.env.AUDITPILOT_SINGLE_PROCESS ? ['--no-sandbox','--no-zygote','--single-process','--disable-gpu'] : ['--no-sandbox']});
+ const c=await b.newContext({viewport:{width:1440,height:1100},acceptDownloads:true});
+ const p=await c.newPage(); const errors=[];p.on('pageerror',e=>errors.push(e.message));
+ for(let i=0;i<30;i++){try{await p.goto(`${BASE_URL}/demo`);break;}catch(e){if(i===29)throw e;await new Promise(r=>setTimeout(r,200));}}
+ await p.screenshot({path:path.join(OUTPUT,'initial.png'),fullPage:true});
+ await p.getByRole('button',{name:'Try messy sample',exact:true}).click();
+ await p.waitForFunction(()=>document.getElementById('finding-count').textContent==='6');
+ assert.equal(await p.locator('#findings-body tr').count(),6);
+ assert.equal(await p.locator('#score').textContent(),'40 / 100');
+ await p.screenshot({path:path.join(OUTPUT,'findings.png'),fullPage:true});
+ await p.selectOption('#severity-filter','High');assert.equal(await p.locator('#findings-body tr').count(),5);
+ const downloadPromise=p.waitForEvent('download');await p.getByRole('button',{name:'Export findings CSV'}).click();
+ const download=await downloadPromise;await download.saveAs(path.join(OUTPUT,'findings.csv'));
+ const fs=require('fs');const csv=fs.readFileSync(path.join(OUTPUT,'findings.csv'),'utf8');assert(csv.includes('Assign an accountable owner'));assert(csv.includes('Review date has passed'));
+ await p.locator('#corrected-button').click();
+ await p.waitForFunction(()=>document.getElementById('score').textContent==='100 / 100');
+ assert.equal(await p.locator('#findings-body tr').count(),0);assert(await p.locator('#empty-findings').isVisible());assert(await p.locator('#export-button').isDisabled());
+ await p.screenshot({path:path.join(OUTPUT,'corrected.png'),fullPage:true});
+ await p.setInputFiles('#register-file',{name:'bad.txt',mimeType:'text/plain',buffer:Buffer.from('bad')});await p.locator('#upload-form').evaluate(f=>f.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})));
+ await p.waitForFunction(()=>!document.getElementById('error').hidden);assert((await p.locator('#error').textContent()).includes('CSV or XLSX'));assert(await p.locator('#results').isHidden());
+ await p.setInputFiles('#register-file',{name:'actual-upload.csv',mimeType:'text/csv',buffer:Buffer.from(fs.readFileSync(path.join(ROOT,'examples','messy-risk-register.csv')))});
+ await p.getByRole('button',{name:'Check register'}).click();await p.waitForFunction(()=>document.getElementById('finding-count').textContent==='6');
+ assert.equal(await p.locator('#result-file').textContent(),'actual-upload.csv');
+ const response=p.waitForResponse(r=>r.url().endsWith('/upload/risk-register'));
+ await p.setInputFiles('#register-file',{name:'injection.csv',mimeType:'text/csv',buffer:Buffer.from('Risk ID,Title,Description,Owner,Treatment,Likelihood,Impact,Review Date\n<script>alert(1)</script>,Sample,Sample,IT,MFA,=1+1,4,2099-01-01\n')});
+ await p.getByRole('button',{name:'Check register'}).click();await response;await p.waitForFunction(()=>document.getElementById('status').textContent.startsWith('Checked'));
+ assert((await p.locator('#findings-body').textContent()).includes('=1+1'));assert.equal(await p.locator('#findings-body script').count(),0);
+ const d2=p.waitForEvent('download');await p.locator('#export-button').click();const exp=await d2;await exp.saveAs(path.join(OUTPUT,'safe-findings.csv'));
+ // Exercise formula escaping as a standalone user-content boundary.
+ await p.setViewportSize({width:390,height:844});await p.goto(`${BASE_URL}/demo`);await p.locator('#messy-button').click();await p.waitForFunction(()=>document.getElementById('finding-count').textContent==='6');
+ assert(await p.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+ await p.screenshot({path:path.join(OUTPUT,'mobile.png'),fullPage:true});
+ assert.deepEqual(errors,[]);console.log('Browser checks passed: samples, upload, filter, CSV export, errors, safe text rendering, mobile layout.');
+ await b.close();
+})().catch(e=>{console.error(e);process.exit(1)});

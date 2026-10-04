@@ -1,0 +1,4 @@
+Risk ID,Title,Description,Owner,Treatment,Likelihood,Impact,Review Date
+R001,Cloud admin access,Privileged accounts lack strong MFA,,Require phishing-resistant MFA,4,5,2026-09-05
+R001,Backup recovery,Restore testing is incomplete,Platform,,3,4,2027-01-03
+R003,Laptop encryption,Some endpoints are not encrypted,IT,Enforce disk encryption,9,4,2027-01-03

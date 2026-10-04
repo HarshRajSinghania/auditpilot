@@ -1,0 +1,9 @@
+SYNTHETIC DEMO DOCUMENT — NOT AN ORGANISATION'S POLICY
+
+Information Security Policy
+Draft
+
+Access to systems must be reviewed regularly. Staff should use strong
+multi-factor authentication, report incidents and protect company data.
+
+This sample deliberately has no approval record or version marker.
