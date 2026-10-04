@@ -1,0 +1,59 @@
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install uv
+        run: python -m pip install uv==0.12.19
+      - name: Install locked dependencies
+        run: uv sync --frozen
+      - name: Test
+        run: uv run pytest -q
+      - name: Type check
+        run: uv run mypy app
+      - name: Lint
+        run: uv run ruff check . ../scripts/demo.py ../scripts/write_samples.py
+      - name: Exercise synthetic walkthrough
+        run: uv run python ../scripts/demo.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test dependencies
+        working-directory: .
+        run: |
+          npm install --no-save --package-lock=false playwright@1.62.1
+          npx playwright install --with-deps chromium
+      - name: Browser smoke checks
+        working-directory: .
+        run: |
+          uv run --project backend uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          node scripts/browser-check.cjs
+      - name: Build and start Docker demo
+        working-directory: .
+        run: docker compose up --build --wait --wait-timeout 180
+      - name: Exercise container API and browser entrypoint
+        run: |
+          uv run python ../scripts/demo.py --base-url http://127.0.0.1:8000
+          curl --fail http://127.0.0.1:8000/demo
+      - name: Container logs
+        if: always()
+        working-directory: .
+        run: docker compose logs
+      - name: Stop container
+        if: always()
+        working-directory: .
+        run: docker compose down

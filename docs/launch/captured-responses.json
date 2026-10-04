@@ -1,0 +1,169 @@
+{
+  "messy": {
+    "filename": "messy.csv",
+    "status": "validated",
+    "rows": 3,
+    "columns": 8,
+    "column_names": [
+      "Risk ID",
+      "Title",
+      "Description",
+      "Owner",
+      "Treatment",
+      "Likelihood",
+      "Impact",
+      "Review Date"
+    ],
+    "score": 40,
+    "audit_readiness": "Not Ready",
+    "findings": [
+      {
+        "severity": "High",
+        "row": 2,
+        "column": "Risk ID",
+        "message": "Duplicate Risk ID: R001",
+        "recommendation": "Ensure every risk has a unique Risk ID."
+      },
+      {
+        "severity": "High",
+        "row": 3,
+        "column": "Risk ID",
+        "message": "Duplicate Risk ID: R001",
+        "recommendation": "Ensure every risk has a unique Risk ID."
+      },
+      {
+        "severity": "High",
+        "row": 2,
+        "column": "Owner",
+        "message": "Risk has no assigned owner.",
+        "recommendation": "Assign an accountable owner to the risk."
+      },
+      {
+        "severity": "High",
+        "row": 3,
+        "column": "Treatment",
+        "message": "Risk has no treatment plan.",
+        "recommendation": "Document a treatment plan for the risk."
+      },
+      {
+        "severity": "Medium",
+        "row": 2,
+        "column": "Review Date",
+        "message": "Review date has passed.",
+        "recommendation": "Update the review date."
+      },
+      {
+        "severity": "High",
+        "row": 4,
+        "column": "Likelihood",
+        "message": "Invalid likelihood value: 9",
+        "recommendation": "Use a numeric likelihood value between 1 and 5."
+      }
+    ]
+  },
+  "corrected": {
+    "filename": "corrected.csv",
+    "status": "validated",
+    "rows": 3,
+    "columns": 8,
+    "column_names": [
+      "Risk ID",
+      "Title",
+      "Description",
+      "Owner",
+      "Treatment",
+      "Likelihood",
+      "Impact",
+      "Review Date"
+    ],
+    "score": 100,
+    "audit_readiness": "Ready",
+    "findings": []
+  },
+  "starter_subset_coverage": {
+    "total_controls": 2,
+    "covered_controls": 1,
+    "uncovered_controls": 1,
+    "coverage_percentage": 50.0,
+    "covered_control_ids": [
+      "A.5.1"
+    ],
+    "uncovered_control_ids": [
+      "A.5.2"
+    ]
+  },
+  "starter_subset_actions": [
+    {
+      "control_id": "A.5.2",
+      "control_title": "Information security roles and responsibilities",
+      "priority": "Medium",
+      "recommendation": "Provide evidence for A.5.2 (Information security roles and responsibilities).",
+      "expected_evidence": [
+        "Roles and responsibilities matrix",
+        "Job descriptions",
+        "RACI matrix"
+      ],
+      "status": "Open"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "7729f71f-5a12-49d4-ae30-042723769e95",
+      "filename": "draft-policy.txt",
+      "document_type": "Policy",
+      "mime_type": "text/plain",
+      "size_bytes": 303,
+      "checksum": "3c67511f1d71a2275d92a4ce2c20d46d9e05b17f7ceb21bcc062d80401caf22f",
+      "uploaded_at": "2026-10-04T22:54:20.868390+00:00",
+      "processing_status": "Processed",
+      "evidence_status": "Human review required",
+      "extracted_text_length": 301,
+      "page_count": null,
+      "word_count": 41,
+      "character_count": 301,
+      "author": null,
+      "document_created_at": null,
+      "document_modified_at": null,
+      "control_mappings": [
+        {
+          "control_id": "A.5.1",
+          "confidence": 0.5,
+          "matched_keywords": [
+            "information security policy",
+            "version"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4eb94f65-0179-4394-bc87-038002cc3440",
+      "filename": "approved-policy.txt",
+      "document_type": "Policy",
+      "mime_type": "text/plain",
+      "size_bytes": 439,
+      "checksum": "528bf716203f6093b570c3cdf72d8b1b33ef1b157dd04207c6de2a2b5a6bd9ec",
+      "uploaded_at": "2026-10-04T22:54:20.871443+00:00",
+      "processing_status": "Processed",
+      "evidence_status": "Sufficient",
+      "extracted_text_length": 437,
+      "page_count": null,
+      "word_count": 61,
+      "character_count": 437,
+      "author": null,
+      "document_created_at": null,
+      "document_modified_at": null,
+      "control_mappings": [
+        {
+          "control_id": "A.5.1",
+          "confidence": 1.0,
+          "matched_keywords": [
+            "information security policy",
+            "approved by",
+            "policy review",
+            "version"
+          ]
+        }
+      ]
+    }
+  ]
+}

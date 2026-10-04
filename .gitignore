@@ -243,3 +243,6 @@ Thumbs.db
 
 # Keep template env files
 !.env.example
+
+# Optional browser verification dependencies
+node_modules/
